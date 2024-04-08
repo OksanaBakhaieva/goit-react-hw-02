@@ -38,6 +38,7 @@ export default function App() {
   const { good, neutral, bad } = rating;
   const totalFeedback = good + neutral + bad;
   const positiveFeedback = totalFeedback > 0 ? Math.round((good / totalFeedback) * 100) : 0;
+  // const positiveFeedback = totalFeedback > 0 ? (Math.round(good / totalFeedback) * 100) : 0;
 
   useEffect(() => {
     localStorage.setItem('feedbackCount', JSON.stringify(rating));
