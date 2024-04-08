@@ -1,4 +1,4 @@
-export default function Notifications () {
+export default function Notification () {
     return (
         <p>No feedback yet</p>
     )

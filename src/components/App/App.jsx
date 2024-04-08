@@ -2,19 +2,22 @@ import { useState, useEffect } from 'react';
 import Description from '../Description/Description';
 import Feedback from '../Feedback/Feedback';
 import Options from '../Options/Options';
-import Notifications from '../Notifications/Notifications';
+import Notification from '../Notification/Notification';
 import css from './App.module.css';
 
+
+
 export default function App() {
-  const [rating, setRating] = useState(
-    localStorage.getItem('key')
-      ? JSON.parse(localStorage.getItem('key'))
-      : {
+  const getInitialClicks = () => {
+  const savedClicks = localStorage.getItem('feedbackCount');
+  return savedClicks !== null ? JSON.parse(savedClicks) : {
         good: 0,
         neutral: 0,
         bad: 0,
-        }
-  );
+        };
+};
+  const [rating, setRating] = useState(getInitialClicks); 
+    
   const updateFeedback = feedbackType => {
     setRating(prevState => {
       return {
@@ -34,10 +37,10 @@ export default function App() {
 
   const { good, neutral, bad } = rating;
   const totalFeedback = good + neutral + bad;
-  const averageRate = Math.round(((good + neutral)/ totalFeedback) * 100);
+  const positiveFeedback = totalFeedback > 0 ? Math.round((good / totalFeedback) * 100) : 0;
 
   useEffect(() => {
-    localStorage.setItem('key', JSON.stringify(rating));
+    localStorage.setItem('feedbackCount', JSON.stringify(rating));
   }, [rating]);
 
   return (
@@ -49,13 +52,13 @@ export default function App() {
         summaryRating={totalFeedback}
       />
       {totalFeedback > 0 ? (
-        <Feedback
+        < Feedback
           rating={rating}
           totalFeedback={totalFeedback}
-          averageRate={averageRate}
+          positiveFeedback={positiveFeedback}
         />
       ) : (
-        <Notifications />
+        <Notification />
       )}
     </div>
   );
